@@ -41,9 +41,7 @@ func textSum(input *os.File) *int {
         }
         
         if len(numsLine) > 2 {
-            numsLine = fmt.Sprintf("%v%v", string(numsLine[0]), string(numsLine[len(numsLines)-1]))
-
-            fmt.Println(string(numsLine[len(numsLines)-1]))
+            numsLine = fmt.Sprintf("%v%v", string(numsLine[0]), string(numsLine[len(numsLine)-1]))
         }
         
         if len(numsLine) < 2 {
@@ -58,19 +56,11 @@ func textSum(input *os.File) *int {
         numsLines = append(numsLines, num)
     }
 
-    fmt.Println(numsLines)
-
-    result := sum(numsLines)
-
-    return &result 
-}
-
-func sum(array []int) int {
     result := 0
 
-    for _, v := range array {
+    for _, v := range numsLines {
         result += v
     }
 
-    return result
+    return &result
 }
