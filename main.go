@@ -11,5 +11,6 @@ func main() {
 	fmt.Println("Day 1:", *day1.Exec())
 	fmt.Println("Day 1, part 2:", *day1.Exec2())
 	fmt.Println("Day 2:", *day2.Exec())
+	fmt.Println("Day 2, part 2:", *day2.Exec2())
 	// fmt.Println("Day 3:", *day3.Exec())
 }

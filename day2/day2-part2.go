@@ -8,28 +8,25 @@ import (
 	"github.com/Edu0liver/Advent-of-Code-2023/pkg"
 )
 
-const MAX_RED = 12
-const MAX_GREEN = 13
-const MAX_BLUE = 14
-
-func Exec() *int {
+func Exec2() *int {
 	dataInput := pkg.OpenFile("day2/input.txt")
 	defer dataInput.Close()
 
-	return part1(dataInput)
+	return part2(dataInput)
 }
 
-func part1(input *os.File) *int {
+func part2(input *os.File) *int {
 	fileLines := pkg.FileLines(input)
 
 	gamesValids := []int{}
 
 	for _, line := range *fileLines {
 		games := strings.Split(line, ": ")
-		gameStats := make(map[string]int)
-		gameNum, err := strconv.Atoi(strings.Split(games[0], " ")[1])
-		if err != nil {
-			panic(err)
+
+		gameStats := map[string]int{
+			"red":   0,
+			"green": 0,
+			"blue":  0,
 		}
 
 		for _, game := range games[1:] {
@@ -54,13 +51,15 @@ func part1(input *os.File) *int {
 			}
 		}
 
-		if gameStats["blue"] <= MAX_BLUE && gameStats["green"] <= MAX_GREEN && gameStats["red"] <= MAX_RED {
-			gamesValids = append(gamesValids, gameNum)
+		power := 1
+		for _, v := range gameStats {
+			power *= v
 		}
+
+		gamesValids = append(gamesValids, power)
 	}
 
 	result := 0
-
 	for _, v := range gamesValids {
 		result += v
 	}
