@@ -1,7 +1,6 @@
 package day2
 
 import (
-	"bufio"
 	"os"
 	"strconv"
 	"strings"
@@ -21,28 +20,21 @@ func Exec() *[]string {
 }
 
 func possibleGames(input *os.File) *[]string {
-    scanner := bufio.NewScanner(input)
-    scanner.Split(bufio.ScanLines)
-
-    var fileLines []string
-
-    for scanner.Scan() {
-        fileLines = append(fileLines, scanner.Text())
-    }
+	fileLines := pkg.FileLines(input)
 
 	gamesValids := []string{}
 
-    for _, line := range fileLines {
+	for _, line := range *fileLines {
 		games := strings.Split(line, ": ")
 		gameStats := make(map[string]int)
 		gameNum := games[0]
-		
+
 		for _, game := range games[1:] {
 			sets := strings.Split(game, "; ")
 
-			for _, set := range sets{
+			for _, set := range sets {
 				colors := strings.Split(set, ", ")
-				
+
 				for _, numColor := range colors {
 					numAndColor := strings.Split(numColor, " ")
 
@@ -60,7 +52,7 @@ func possibleGames(input *os.File) *[]string {
 		if gameStats["blue"] <= MAX_BLUE && gameStats["green"] <= MAX_GREEN && gameStats["red"] <= MAX_RED {
 			gamesValids = append(gamesValids, gameNum)
 		}
-    }
+	}
 
 	return &gamesValids
 }

@@ -1,7 +1,6 @@
 package day3
 
 import (
-	"bufio"
 	"os"
 	"unicode"
 
@@ -16,19 +15,12 @@ func Exec() *int {
 }
 
 func partsSum(input *os.File) *int {
-    scanner := bufio.NewScanner(input)
-    scanner.Split(bufio.ScanLines)
-
-    var fileLines []string
-
-    for scanner.Scan() {
-        fileLines = append(fileLines, scanner.Text())
-    }
+	fileLines := pkg.FileLines(input)
 
 	validNums := []int{}
 	mappedInput := [][]string{}
 
-    for _, line := range fileLines {
+	for _, line := range *fileLines {
 		lineMap := []string{}
 
 		for _, c := range line {
@@ -36,24 +28,23 @@ func partsSum(input *os.File) *int {
 		}
 
 		mappedInput = append(mappedInput, lineMap)
-    }
+	}
 
 	for _, arr := range mappedInput {
-		valueArr:
+	valueArr:
 		for i, v := range arr {
-            if !unicode.IsDigit([]rune(v)[0]) {
+			if !unicode.IsDigit([]rune(v)[0]) {
 				continue valueArr
-            }
+			}
 
-			
 		}
 	}
 
-    result := 0
+	result := 0
 
-    for _, v := range validNums {
-        result += v
-    }
+	for _, v := range validNums {
+		result += v
+	}
 
-    return &result
+	return &result
 }
