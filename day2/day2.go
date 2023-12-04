@@ -5,6 +5,8 @@ import (
 	"os"
 	"strconv"
 	"strings"
+
+	"github.com/Edu0liver/Advent-of-Code-2023/pkg"
 )
 
 const MAX_RED = 12
@@ -12,10 +14,7 @@ const MAX_GREEN = 13
 const MAX_BLUE = 14
 
 func Exec() *[]string {
-	dataInput, err := os.Open(os.Getenv("ABSOLUTE_PATH") + "day2/input.txt")
-	if err != nil {
-		panic(err)
-	}
+	dataInput := pkg.OpenFile("day2/input.txt")
 	defer dataInput.Close()
 
 	return possibleGames(dataInput)

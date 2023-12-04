@@ -6,14 +6,13 @@ import (
 	"os"
 	"strconv"
 	"unicode"
+
+	"github.com/Edu0liver/Advent-of-Code-2023/pkg"
 )
 
 func Exec() *int {
-    dataInput, err := os.Open(os.Getenv("ABSOLUTE_PATH") + "day1/input.txt")
-    if err != nil {
-        panic(err)
-    }
-    defer dataInput.Close()
+	dataInput := pkg.OpenFile("day1/input.txt")
+	defer dataInput.Close()
     
     return textSum(dataInput)
 }
