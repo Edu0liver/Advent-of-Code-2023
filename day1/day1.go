@@ -13,10 +13,10 @@ func Exec() *int {
 	dataInput := pkg.OpenFile("day1/input.txt")
 	defer dataInput.Close()
 
-	return textSum(dataInput)
+	return part1(dataInput)
 }
 
-func textSum(input *os.File) *int {
+func part1(input *os.File) *int {
 	fileLines := pkg.FileLines(input)
 	var numsLines []int
 
