@@ -8,16 +8,14 @@ import (
 	"unicode"
 )
 
-func Exec() {
+func Exec() *int {
     dataInput, err := os.Open(os.Getenv("ABSOLUTE_PATH") + "day1/input.txt")
     if err != nil {
         panic(err)
     }
     defer dataInput.Close()
     
-    result := textSum(dataInput)
-
-    fmt.Println(*result)
+    return textSum(dataInput)
 }
 
 func textSum(input *os.File) *int {
