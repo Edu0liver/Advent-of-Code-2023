@@ -4,6 +4,7 @@ import (
 	"os"
 	"strconv"
 	"strings"
+	"sync"
 
 	"github.com/Edu0liver/Advent-of-Code-2023/pkg"
 )
@@ -20,44 +21,51 @@ func part2(input *os.File) *int {
 
 	gamesValids := []int{}
 
-	for _, line := range *fileLines {
-		games := strings.Split(line, ": ")
+	var wg sync.WaitGroup
 
-		gameStats := map[string]int{
-			"red":   0,
-			"green": 0,
-			"blue":  0,
-		}
+	wg.Add(1)
+	go func() {
+		for _, line := range *fileLines {
+			games := strings.Split(line, ": ")
 
-		for _, game := range games[1:] {
-			sets := strings.Split(game, "; ")
+			gameStats := map[string]int{
+				"red":   0,
+				"green": 0,
+				"blue":  0,
+			}
 
-			for _, set := range sets {
-				colors := strings.Split(set, ", ")
+			for _, game := range games[1:] {
+				sets := strings.Split(game, "; ")
 
-				for _, numColor := range colors {
-					numAndColor := strings.Split(numColor, " ")
+				for _, set := range sets {
+					colors := strings.Split(set, ", ")
 
-					color := strings.TrimSpace(numAndColor[1])
-					num, err := strconv.Atoi(strings.TrimSpace(numAndColor[0]))
-					if err != nil {
-						panic(err)
-					}
+					for _, numColor := range colors {
+						numAndColor := strings.Split(numColor, " ")
 
-					if gameStats[color] < num {
-						gameStats[color] = num
+						color := strings.TrimSpace(numAndColor[1])
+						num, err := strconv.Atoi(strings.TrimSpace(numAndColor[0]))
+						if err != nil {
+							panic(err)
+						}
+
+						if gameStats[color] < num {
+							gameStats[color] = num
+						}
 					}
 				}
 			}
-		}
 
-		power := 1
-		for _, v := range gameStats {
-			power *= v
-		}
+			power := 1
+			for _, v := range gameStats {
+				power *= v
+			}
 
-		gamesValids = append(gamesValids, power)
-	}
+			gamesValids = append(gamesValids, power)
+		}
+		wg.Done()
+	}()
+	wg.Wait()
 
 	result := 0
 	for _, v := range gamesValids {
