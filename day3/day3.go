@@ -1,6 +1,7 @@
 package day3
 
 import (
+	"fmt"
 	"os"
 	"unicode"
 
@@ -17,7 +18,7 @@ func Exec() *int {
 func partsSum(input *os.File) *int {
 	fileLines := pkg.FileLines(input)
 
-	validNums := []int{}
+	validNums := make(map[int]int)
 	mappedInput := [][]string{}
 
 	for _, line := range *fileLines {
@@ -30,13 +31,24 @@ func partsSum(input *os.File) *int {
 		mappedInput = append(mappedInput, lineMap)
 	}
 
-	for _, arr := range mappedInput {
-	valueArr:
-		for i, v := range arr {
-			if !unicode.IsDigit([]rune(v)[0]) {
-				continue valueArr
-			}
+	for iarr, arr := range mappedInput {
+		prevArr := arr
+		nextArr := arr
 
+		if iarr > 0 {
+			prevArr = mappedInput[iarr-1]
+		}
+
+		if iarr < (len(arr) - 1) {
+			nextArr = mappedInput[iarr+1]
+		}
+
+		for i := range arr {
+			if HaveSymbolsAround(&arr, i) ||
+				HaveSymbolsAround(&prevArr, i) ||
+				HaveSymbolsAround(&nextArr, i) {
+				validNums[iarr] = i
+			}
 		}
 	}
 
@@ -47,4 +59,31 @@ func partsSum(input *os.File) *int {
 	}
 
 	return &result
+}
+
+func HaveSymbolsAround(currentArray *[]string, currentIndex int) bool {
+	fmt.Println(*currentArray)
+	currentChar := (*currentArray)[currentIndex]
+	prevChar := (*currentArray)[currentIndex]
+	nextChar := (*currentArray)[len(*currentArray)-1]
+
+	if currentIndex > 0 {
+		prevChar = (*currentArray)[currentIndex-1]
+	}
+
+	if currentIndex < (len(*currentArray) - 1) {
+		nextChar = (*currentArray)[currentIndex+1]
+	}
+
+	if (!unicode.IsDigit(toRune(&currentChar)) && !unicode.IsLetter(toRune(&currentChar)) && currentChar != ".") ||
+		(!unicode.IsDigit(toRune(&prevChar)) && !unicode.IsLetter(toRune(&prevChar)) && prevChar != ".") ||
+		(!unicode.IsDigit(toRune(&nextChar)) && !unicode.IsLetter(toRune(&nextChar)) && nextChar != ".") {
+		return true
+	}
+
+	return false
+}
+
+func toRune(c *string) rune {
+	return []rune(*c)[0]
 }
