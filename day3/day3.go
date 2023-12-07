@@ -18,7 +18,7 @@ func Exec() *int {
 func partsSum(input *os.File) *int {
 	fileLines := pkg.FileLines(input)
 
-	validNums := make(map[int]int)
+	validNums := make(map[int][]int)
 	mappedInput := [][]string{}
 
 	for _, line := range *fileLines {
@@ -43,26 +43,32 @@ func partsSum(input *os.File) *int {
 			nextArr = mappedInput[iarr+1]
 		}
 
-		for i := range arr {
+	innerArray:
+		for i, v := range arr {
+			if !unicode.IsDigit(toRune(&v)) {
+				continue innerArray
+			}
+
 			if HaveSymbolsAround(&arr, i) ||
 				HaveSymbolsAround(&prevArr, i) ||
 				HaveSymbolsAround(&nextArr, i) {
-				validNums[iarr] = i
+				validNums[iarr] = append(validNums[iarr], i)
 			}
 		}
 	}
 
+	fmt.Println(validNums)
+
 	result := 0
 
-	for _, v := range validNums {
-		result += v
-	}
+	// for _, v := range validNums {
+	// 	result += v
+	// }
 
 	return &result
 }
 
 func HaveSymbolsAround(currentArray *[]string, currentIndex int) bool {
-	fmt.Println(*currentArray)
 	currentChar := (*currentArray)[currentIndex]
 	prevChar := (*currentArray)[currentIndex]
 	nextChar := (*currentArray)[len(*currentArray)-1]
